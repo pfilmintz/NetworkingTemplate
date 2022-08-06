@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+enum Methods: String{
+    
+    case get = "GET"
+    case post = "POST"
+    case delete = "DELETE"
+}
