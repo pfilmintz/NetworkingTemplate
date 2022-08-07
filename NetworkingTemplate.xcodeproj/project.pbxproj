@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		041A7831289FD2B40072D54B /* twitter_bookmarks_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 041A7830289FD2B40072D54B /* twitter_bookmarks_response.json */; };
+		041A7832289FF38F0072D54B /* itemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04323552289ED7B600D95C7D /* itemModel.swift */; };
 		04323530289EB74300D95C7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432352F289EB74300D95C7D /* AppDelegate.swift */; };
 		04323532289EB74300D95C7D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04323531289EB74300D95C7D /* SceneDelegate.swift */; };
 		04323534289EB74300D95C7D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04323533289EB74300D95C7D /* ViewController.swift */; };
@@ -36,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		041A7830289FD2B40072D54B /* twitter_bookmarks_response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twitter_bookmarks_response.json; sourceTree = "<group>"; };
 		0432352C289EB74300D95C7D /* NetworkingTemplate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetworkingTemplate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0432352F289EB74300D95C7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		04323531289EB74300D95C7D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -144,6 +147,7 @@
 			children = (
 				04323571289EEE1500D95C7D /* MockURLProtocol.swift */,
 				04323573289EEE8D00D95C7D /* MockResponseClient.swift */,
+				041A7830289FD2B40072D54B /* twitter_bookmarks_response.json */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -239,6 +243,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				041A7831289FD2B40072D54B /* twitter_bookmarks_response.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +273,7 @@
 			files = (
 				0432356F289EEC7100D95C7D /* NetworkingTemplateTests.swift in Sources */,
 				04323572289EEE1500D95C7D /* MockURLProtocol.swift in Sources */,
+				041A7832289FF38F0072D54B /* itemModel.swift in Sources */,
 				04323574289EEE8D00D95C7D /* MockResponseClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -11,11 +11,10 @@ import Foundation
 //all functions in Network Service to be tested
 protocol NetworkServiceProtocol{
     
-     func request<T: Decodable>(route: Route,
-                                       method: Methods,
-                                       parameters: [String:Any]?,
-                                       
-                                       completion: @escaping(Result<T,Error>) -> ())
+     func makeRequest(route: Route,
+                      method: Methods,
+                      parameters: [String:Any]?,
+                      completion: @escaping(Result<Data,Error>) -> ())
     
     func handleResponse<T: Decodable>(result: Result<Data,Error>?,
                                 completion: (Result<T,Error>) -> ())

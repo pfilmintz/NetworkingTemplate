@@ -25,7 +25,22 @@ class MockResponseClient{
 extension MockResponseClient: NetworkServiceProtocol{
     //mock requests here
     
-    func request<T: Decodable>(route: Route, method: Methods, parameters: [String : Any]?, completion: @escaping (Result<T, Error>) -> ())  {
+     static func loadJsonDataFromFile(_ path: String, completion: (Data?) -> Void) {
+        
+        if let fileUrl = Bundle(for: MockResponseClient.self).url(forResource: path, withExtension: "json") {
+               do {
+                   let data = try Data(contentsOf: fileUrl, options: [])
+                   completion(data as Data)
+               } catch (let error) {
+                   print(error.localizedDescription)
+                   completion(nil)
+               }
+           }else{
+               print("can decode")
+           }
+       }
+    
+    func makeRequest(route: Route, method: Methods, parameters: [String : Any]?, completion: @escaping (Result<Data, Error>) -> ())  {
         
         guard let request = createRequest(route: route, method: method, parameters: parameters) else{
             
@@ -35,39 +50,99 @@ extension MockResponseClient: NetworkServiceProtocol{
         
         let anyURL = request.url
         
-        let bundle = Bundle(for: type(of:self))
-        let filePath = bundle.path(
-                     forResource: "play", ofType: "png")
         
         //mock data to be returned by fake urlSession.downloadTask (MockURLProtocol) and returned to test fxn
-        let anyData = try?
-                     Data(contentsOf:
-                     URL(fileURLWithPath: filePath!))
+        
+       
+        var anyData: Data?
+        
+        let filePath = "twitter_bookmarks_response"
+        
+        MockResponseClient.loadJsonDataFromFile(filePath, completion: { data in
+                   if let json = data {
+                       
+                       anyData = json
+                       
+                   }else{
+                       //failed to read from file
+                       completion(.failure(AppError.unknownError))
+                       return
+                       
+                   }
+               })
+           
         
         
-        
-        //let anyData = Data("any data".utf8)
         let anyResponse = HTTPURLResponse(url: anyURL!, statusCode: 200, httpVersion: nil, headerFields: nil)!
         
-        MockURLProtocol.stub(url: anyURL!, data: <#T##Data?#>, response: anyResponse, error: nil)
+        MockURLProtocol.stub(url: anyURL!, data: anyData, response: anyResponse, error: nil)
         
         urlSession.dataTask(with: request) {  data, response, error in
             var result: Result<Data,Error>?
             if let data = data {
                 result = .success(data)
                 
-                let responseString = String(data: data, encoding: .utf8) ?? "Could not stringify data"
-                print("The resonse is:\n\(responseString)")
+                completion(result!)
+                
             }else if let error = error {
                 result = .failure(error)
-                print("The error is \(error.localizedDescription)")
+                completion(result!)
             }
             
         }.resume()
         
     }
     
-    func handleResponse<T>(result: Result<Data, Error>?, completion: (Result<T, Error>) -> ()) where T : Decodable {
+    func handleResponse<T: Decodable>(result: Result<Data, Error>?, completion: (Result<T, Error>) -> ())  {
+        
+        
+        guard let result = result else {
+            completion(.failure(AppError.unknownError))
+            return
+        }
+        
+        switch result{
+            
+        case .success(let data):
+            let decoder = JSONDecoder()
+            
+            //ApiResponse<T>.self is dynamic model based on request
+          /*  guard let response = try? decoder.decode(ApiResponse<T>.self, from: data)else{
+                completion(.failure(AppError.errorDecoding))
+                return
+                
+            }*/
+            
+            let response: ApiResponse<T>
+            
+            do {
+                  
+                let decoder = JSONDecoder()
+                 response = try decoder.decode(ApiResponse<T>.self, from: data)
+                
+               } catch let error {
+                   print("Error", error)
+                   return
+               }
+            
+            
+           /* if let error = response.error{
+                completion(.failure(AppError.serverError(error)))
+                return
+            }*/
+            
+            if let decodedData = response.data{
+                completion(.success(decodedData))
+            }else{
+                
+                //probably no data from respinse
+                completion(.failure(AppError.unknownError))
+            }
+            
+        case .failure(let error):
+            completion(.failure(error))
+            return
+        }
         
     }
     

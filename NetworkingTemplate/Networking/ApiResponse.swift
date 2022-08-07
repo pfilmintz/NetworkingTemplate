@@ -9,12 +9,17 @@ import Foundation
 
     //response from backend
 struct ApiResponse<T: Decodable>: Decodable {
-    let status: Int
-    let message: String?
+ //   let status: Int
+ //   let message: String?
     
     //generic type T as placeholder to model
+   // let data: T?
+    
+    //in this case im assuming [Tweet] will be dynamic 
     let data: T?
-    let error: String?
+    let includes: Includes
+    
+//    let error: String?
     
     
 }

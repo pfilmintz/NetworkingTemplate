@@ -13,20 +13,18 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        NetworkService.shared.myFirstRequest{ (result) in
+     /*   NetworkService.shared.myFirstRequest{ (result) in
             
             switch result{
                 
             case .success(let data):
-                for item in data{
-                    
-                    let name = item.name ?? ""
-                    
-                }
+               
+                let names = data.data
+                
             case .failure(let error):
                 print("Error is: \(error.localizedDescription)")
             }
-        }
+        }*/
     }
 
 

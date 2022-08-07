@@ -16,7 +16,7 @@ struct NetworkService: NetworkServiceProtocol{
     
     
     
-    func myFirstRequest(completion: @escaping(Result<[itemModel],Error>) -> ()){
+    func myFirstRequest(completion: @escaping(Result<TwitterAPIResponse,Error>) -> ()){
         request(route: .bookmarks, method: .get, parameters: nil, completion: completion)
     }
  
@@ -39,6 +39,9 @@ struct NetworkService: NetworkServiceProtocol{
                 
                 let responseString = String(data: data, encoding: .utf8) ?? "Could not stringify data"
                 print("The resonse is:\n\(responseString)")
+                
+                
+                
             }else if let error = error {
                 result = .failure(error)
                 print("The error is \(error.localizedDescription)")
@@ -76,10 +79,10 @@ struct NetworkService: NetworkServiceProtocol{
                 
             }
             
-            if let error = response.error{
+         /*   if let error = response.error{
                 completion(.failure(AppError.serverError(error)))
                 return
-            }
+            }*/
             
             if let decodedData = response.data{
                 completion(.success(decodedData))
@@ -150,6 +153,37 @@ struct NetworkService: NetworkServiceProtocol{
         
         return urlRequest
     }
+    
+    func makeRequest(route: Route,
+                                      method: Methods,
+                                      parameters: [String:Any]? = nil,
+                                      
+                                      completion: @escaping(Result<Data,Error>) -> ()){
+       
+       guard let request = createRequest(route: route, method: method, parameters: parameters) else{
+           
+           completion(.failure(AppError.invalidUrl))
+           return
+       }
+       
+       URLSession.shared.dataTask(with: request) { data,response,error in
+           var result: Result<Data,Error>?
+           if let data = data {
+               result = .success(data)
+               
+               completion(result!)
+               
+               
+           }else if let error = error {
+               result = .failure(error)
+               completion(result!)
+           }
+           
+          
+           
+       }.resume()
+       
+   }
     
 }
 
