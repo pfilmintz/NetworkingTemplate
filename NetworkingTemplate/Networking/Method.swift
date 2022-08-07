@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Methods: String{
+public enum Methods: String{
     
     case get = "GET"
     case post = "POST"

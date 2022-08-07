@@ -8,19 +8,19 @@
 import Foundation
 
 
-struct NetworkService{
+struct NetworkService: NetworkServiceProtocol{
     
     static let shared = NetworkService()
     
-    private init(){}
+  //  private init(){}
     
     
     
     func myFirstRequest(completion: @escaping(Result<[itemModel],Error>) -> ()){
-        request(route: .temp, method: .get, parameters: nil, completion: completion)
+        request(route: .bookmarks, method: .get, parameters: nil, completion: completion)
     }
  
-    private func request<T: Decodable>(route: Route,
+     func request<T: Decodable>(route: Route,
                                        method: Methods,
                                        parameters: [String:Any]? = nil,
                                        
@@ -56,7 +56,7 @@ struct NetworkService{
     /// - Parameters:
     ///   - result: tells me whether there is an error or there is data to be decoded from the response
     ///   - completion: me trying to return decoded data or error if dedcoding fails
-    private func handleResponse<T: Decodable>(result: Result<Data,Error>?,
+     func handleResponse<T: Decodable>(result: Result<Data,Error>?,
                                 completion: (Result<T,Error>) -> ()){
         
         guard let result = result else {
@@ -102,11 +102,11 @@ struct NetworkService{
     ///   - method: type of request to be made
     ///   - parameters: extra data to be passed to the backend
     /// - Returns: returns URlRequest
-    private func createRequest(route: Route,
+     func createRequest(route: Route,
                                method: Methods,
                                parameters:[String: Any]? = nil) -> URLRequest?{
         
-        let urlString = Route.baseURl + route.description
+        let urlString = Route.baseUrl + route.description
         
         guard let url = URL(string: urlString) else {return nil}
         
@@ -152,3 +152,5 @@ struct NetworkService{
     }
     
 }
+
+
